@@ -1,255 +1,463 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STPN-D | COMING SOON</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <title>STPN-D | THE PHOTO MONSTER</title>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts -->
+
+    <!-- Google Fonts: Bodoni Moda (Art Contrast) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://use.typekit.net/udk0axs.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400;1,6..96,700&display=swap" rel="stylesheet">
+
     <!-- Ikony -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        void: '#050505',
-                        paper: '#e6e6e6',
-                        line: '#333333',
-                        accent: '#ff3333',
-                    },
-                    fontFamily: {
-                        'serif': ['Cormorant Garamond', 'serif'],
-                        'sans': ['Inter', 'sans-serif'],
-                    },
-                    cursor: {
-                        'none': 'none',
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
     <style>
+        /* --- PALETA & ZÁKLAD --- */
+        :root {
+            --bg-void: #000000;
+            --text-main: #e0e0e0;
+            --blood: #8a0000; /* Gaga Red */
+
+            --font-tfm: "news-gothic-std", sans-serif;
+            --font-art: "Bodoni Moda", serif;
+            --ease-fashion: cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none !important; /* Hide default cursor everywhere */
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg-void);
+        }
+
         body {
-            background-color: #050505;
-            color: #e6e6e6;
-            overflow: hidden; /* Lock scroll for coming soon */
-            cursor: none;
-            /* Grid Background Pattern */
-            background-image: linear-gradient(#1a1a1a 1px, transparent 1px),
-                              linear-gradient(90deg, #1a1a1a 1px, transparent 1px);
-            background-size: 50px 50px;
+            font-family: var(--font-tfm);
+            background-color: var(--bg-void);
+            color: var(--text-main);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
         }
 
-        /* --- UI ELEMENTS --- */
-        .border-frame {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            bottom: 20px;
-            border: 1px solid #333;
-            pointer-events: none;
-            z-index: 20;
+        /* --- MONSTER TYPOGRAPHY --- */
+        .tfm-bold {
+            font-family: var(--font-tfm);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.05em; /* Extreme tight tracking */
         }
 
-        /* --- CURSOR --- */
-        .cursor-dot {
+        .art-italic {
+            font-family: var(--font-art);
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        /* CROSS ICON REPLACEMENT */
+        .cross-icon {
+            display: inline-block;
+            width: 0.65em;
+            height: 0.8em;
+            fill: currentColor;
+            vertical-align: baseline;
+        }
+
+        /* --- MONSTER CURSOR (Industrial Crosshair) --- */
+        .cursor-wrapper {
             position: fixed;
             top: 0;
             left: 0;
-            width: 8px;
-            height: 8px;
-            background-color: #ff3333;
-            border-radius: 50%;
             pointer-events: none;
             z-index: 9999;
-            transform: translate(-50%, -50%);
+            mix-blend-mode: exclusion;
         }
-        .cursor-ring {
-            position: fixed;
-            top: 0;
-            left: 0;
+
+        .cursor-cross {
+            position: absolute;
+            transform: translate(-50%, -50%);
             width: 40px;
             height: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            transition: transform 0.2s ease;
         }
 
-        /* --- TYPOGRAPHY --- */
-        .big-serif {
-            font-family: 'Cormorant Garamond', serif;
-            line-height: 0.9;
-        }
-        .meta-text {
-            font-family: 'Inter', sans-serif;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: #666;
+            .cursor-cross::before, .cursor-cross::after {
+                content: '';
+                position: absolute;
+                background-color: var(--blood);
+                transition: all 0.3s ease;
+            }
+
+            /* Vertical line */
+            .cursor-cross::before {
+                top: 0;
+                left: 50%;
+                width: 2px;
+                height: 100%;
+                transform: translateX(-50%);
+            }
+            /* Horizontal line */
+            .cursor-cross::after {
+                top: 50%;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                transform: translateY(-50%);
+            }
+
+        /* Hover State - Rotate and Expand */
+        body.hovering .cursor-cross {
+            transform: translate(-50%, -50%) rotate(45deg) scale(1.5);
         }
 
-        /* --- PRELOADER --- */
-        .preloader {
+            body.hovering .cursor-cross::before,
+            body.hovering .cursor-cross::after {
+                background-color: white;
+            }
+
+        /* --- TEXTURES (Latex & Noise) --- */
+        .latex-overlay {
             position: fixed;
             inset: 0;
-            background: #050505;
-            z-index: 10000;
+            /* Glossy reflection effect */
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.02) 100%);
+            pointer-events: none;
+            z-index: 40;
+        }
+
+        .grain-overlay {
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 41;
+            opacity: 0.3;
+            mix-blend-mode: overlay;
+        }
+
+        /* --- HERO & LAYOUT --- */
+        header {
+            height: 100svh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid #222;
         }
 
-        /* --- FORM STYLES --- */
-        .input-minimal {
-            background: transparent;
-            border-bottom: 1px solid #333;
+        .hero-bg-image {
+            position: absolute;
+            inset: 0;
+            /* Darker, moodier image */
+            background-image: url('https://images.unsplash.com/photo-1675119711552-77d4c766ab0f?q=80&w=1170&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(100%) contrast(1.8) brightness(0.4);
+            z-index: 0;
+            transform: scale(1.1);
+        }
+
+        /* --- STATIC TYPOGRAPHY --- */
+        .hero-title {
+            font-family: var(--font-tfm);
+            font-weight: 700;
+            font-size: clamp(4rem, 16vw, 14rem);
+            line-height: 0.8;
+            letter-spacing: -0.06em;
             color: #fff;
-            padding: 0.5rem 0;
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            transition: border-color 0.3s;
-            width: 100%;
-        }
-        .input-minimal:focus {
-            border-color: #fff;
-        }
-        .btn-minimal {
             text-transform: uppercase;
-            font-family: 'Inter', sans-serif;
-            font-size: 10px;
-            letter-spacing: 0.2em;
-            padding: 0.8rem 2rem;
-            border: 1px solid #333;
-            transition: all 0.3s;
+            text-shadow: 0 0 30px rgba(0,0,0,1);
+            position: relative;
+            z-index: 10;
+            mix-blend-mode: normal;
+            /* Snížená opacita podle požadavku */
+            opacity: 0.5;
         }
-        .btn-minimal:hover {
-            background: #fff;
-            color: #000;
-            border-color: #fff;
+
+        .hero-subtitle {
+            font-family: var(--font-art);
+            font-style: italic;
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            color: rgba(255,255,255,0.7);
+            z-index: 2;
+            letter-spacing: 0.05em;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.8);
+            margin-top: 2rem;
+        }
+
+        /* --- MARQUEE --- */
+        .marquee-wrapper {
+            background: var(--bg-void);
+            padding: 20px 0;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            z-index: 5;
+        }
+
+        .marquee-item {
+            display: inline-block;
+            font-family: var(--font-tfm);
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-right: 60px;
+            letter-spacing: -0.02em;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        .marquee-wrapper:hover .marquee-item {
+            color: white;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        /* --- CONTENT BOX --- */
+        .content-section {
+            padding: 150px 24px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to bottom, #000 0%, #0a0a0a 100%);
+        }
+
+        .notify-btn {
+            display: inline-block;
+            padding: 20px 60px;
+            border: 1px solid white;
+            color: white;
+            font-family: var(--font-tfm);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 0.8rem;
+            transition: all 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+            background: transparent;
+            cursor: none; /* Custom cursor handles this */
+            margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .notify-btn::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: var(--blood);
+                transition: left 0.3s ease;
+                z-index: -1;
+                mix-blend-mode: multiply;
+            }
+
+            .notify-btn:hover::after {
+                left: 0;
+            }
+
+            .notify-btn:hover {
+                border-color: var(--blood);
+                text-shadow: 0 0 10px rgba(255,0,0,0.5);
+            }
+
+        /* --- GLITCH EFFECT --- */
+        .glitch-effect {
+            position: relative;
+        }
+        /* Odebrán hover efekt glitch animace */
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #000;
+            color: #444;
+            padding: 40px;
+            text-align: center;
+            font-family: var(--font-tfm);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            border-top: 1px solid #111;
         }
     </style>
 </head>
-<body class="selection:bg-white selection:text-black flex items-center justify-center min-h-screen">
+<body>
 
-    <!-- CURSOR -->
-    <div class="cursor-dot"></div>
-    <div class="cursor-ring"></div>
-
-    <!-- PRELOADER -->
-    <div class="preloader">
-        <h1 class="big-serif text-6xl italic mb-4 animate-pulse">stpn-d</h1>
-        <div class="w-64 h-[1px] bg-[#333] relative overflow-hidden">
-            <div class="absolute inset-0 bg-white w-full h-full animate-[ping_1.5s_ease-in-out_infinite] origin-left"></div>
-        </div>
-        <p class="meta-text mt-4">Initializing...</p>
+    <!-- CUSTOM CURSOR -->
+    <div class="cursor-wrapper">
+        <div class="cursor-cross"></div>
     </div>
 
-    <!-- DECORATIVE FRAME -->
-    <div class="border-frame"></div>
-    
-    <!-- BACKGROUND TEXT -->
-    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none w-full text-center overflow-hidden z-0">
-        <h1 class="big-serif text-[30vw] italic whitespace-nowrap">art</h1>
-    </div>
+    <!-- TEXTURES -->
+    <div class="grain-overlay"></div>
+    <div class="latex-overlay"></div>
 
-    <!-- MAIN CONTENT -->
-    <main class="relative z-10 text-center max-w-3xl px-6 flex flex-col items-center">
-        
-        <!-- Status Indicator -->
-        <div class="mb-8 flex items-center gap-3 border border-[#333] px-4 py-2 bg-[#050505]/80 backdrop-blur-sm">
-            <div class="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
-            <span class="meta-text text-gray-400">Site Under Construction</span>
+    <!-- HERO -->
+    <header id="home">
+        <div class="hero-bg-image"></div>
+
+        <!-- TOP UI -->
+        <div class="absolute top-8 left-8 text-[10px] uppercase tracking-[0.3em] text-gray-500 z-20">Vol. IV — Manifesto</div>
+        <div class="absolute top-8 right-8 text-[10px] uppercase tracking-[0.3em] text-gray-500 z-20">Prague 2025</div>
+
+        <!-- MAIN TITLE (STATIC, LESS OPAQUE) -->
+        <div class="relative z-10 flex flex-col items-center w-full">
+            <h1 class="hero-title text-center">
+                THE PHOTO<br>
+                MONS<svg class="cross-icon" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <path d="M40 0 H60 V30 H100 V50 H60 V100 H40 V50 H0 V30 H40 Z" fill="currentColor" />
+                </svg>ER
+            </h1>
+
+            <p class="font-art italic text-lg md:text-2xl text-gray-400 mt-12 max-w-lg leading-relaxed mix-blend-lighten">
+                "I want your ugly, I want your disease."
+            </p>
         </div>
 
-        <!-- Title -->
-        <h1 class="big-serif text-7xl md:text-9xl uppercase tracking-tighter mb-6">
-            stpn-d<br><span class="italic text-gray-500"></span>
-        </h1>
+        <!-- SCROLL INDICATOR -->
+        <div class="absolute bottom-12 flex flex-col items-center gap-4 z-20">
+            <span class="text-[9px] uppercase tracking-[0.3em] text-red-700 animate-pulse">Scroll to Bleed</span>
+            <div class="w-[1px] h-16 bg-gradient-to-b from-red-700 to-transparent"></div>
+        </div>
+    </header>
 
-        <!-- Subtitle/Manifesto Snippet -->
-        <p class="font-serif text-xl md:text-2xl text-gray-400 max-w-lg leading-relaxed italic mb-12">
-            "The masterpiece is not finished until it screams. The collection is currently being curated."
-        </p>
+    <!-- MARQUEE: THE FEARS -->
+    <div class="marquee-wrapper">
+        <div class="marquee-content" id="marquee-track">
+            <div class="marquee-item">Fear of Truth <span class="text-red-900">†</span> Fear of Love <span class="text-red-900">†</span> Fear of Sex <span class="text-red-900">†</span> Fear of Death <span class="text-red-900">†</span></div>
+            <div class="marquee-item">Fear of Truth <span class="text-red-900">†</span> Fear of Love <span class="text-red-900">†</span> Fear of Sex <span class="text-red-900">†</span> Fear of Death <span class="text-red-900">†</span></div>
+            <div class="marquee-item">Fear of Truth <span class="text-red-900">†</span> Fear of Love <span class="text-red-900">†</span> Fear of Sex <span class="text-red-900">†</span> Fear of Death <span class="text-red-900">†</span></div>
+        </div>
+    </div>
 
-        <!-- Newsletter / Notification
-        <div class="w-full max-w-md border-t border-[#333] pt-12">
-            <p class="meta-text mb-6">Notify me upon release</p>
-            <form class="flex flex-col md:flex-row gap-4" onsubmit="event.preventDefault(); alert('Registered.');">
-                <input type="email" placeholder="EMAIL ADDRESS" class="input-minimal hoverable" data-cursor="input">
-                <button type="submit" class="btn-minimal hoverable" data-cursor="link">Subscribe</button>
-            </form>
-        </div> -->
+    <!-- COMING SOON CONTENT -->
+    <section class="content-section">
+        <div class="max-w-2xl text-center">
+            <div class="inline-block border border-gray-800 px-4 py-1 mb-8">
+                <span class="text-[10px] uppercase tracking-[0.4em] text-red-900">Status: Classified</span>
+            </div>
 
-        <!-- Footer Links 
-        <div class="mt-16 flex gap-8">
-            <a href="#" class="meta-text hover:text-white transition-colors border-b border-transparent hover:border-white hoverable" data-cursor="link">Instagram</a>
-            <a href="" class="meta-text hover:text-white transition-colors border-b border-transparent hover:border-white hoverable" data-cursor="link">Contact</a>
-        </div>-->
+            <h2 class="hero-title text-[3rem] md:text-[5rem] mb-8 text-[#222]" style="color: #222; text-shadow: none; opacity: 1;">
+                GALLERY<br>LOCKED
+            </h2>
 
-    </main>
+            <p class="font-art text-xl text-gray-500 leading-loose italic">
+                Expanding the world of The Fame by revealing its shadowy side.<br>
+                Cold electropop. Industrial silence. Unapologetic art.
+            </p>
 
-    <!-- CORNER METADATA -->
-    <div class="fixed top-8 left-8 meta-text hidden md:block z-30">Vol. I</div>
-    <div class="fixed top-8 right-8 meta-text hidden md:block z-30">Est. 2025</div>
-    <div class="fixed bottom-8 left-8 meta-text hidden md:block z-30">Jihlava, CZ</div>
-    <div class="fixed bottom-8 right-8 meta-text hidden md:block z-30">© 2025</div>
+            <button class="notify-btn" data-hover onclick="alert('Welcome to the Monster Ball.')">
+                Enter The Void
+            </button>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        &copy; 2025 STPN-D <span class="text-red-900">†</span> THE PHOTO MONSTER
+    </footer>
 
     <script>
-        // Preloader
+        // Init GSAP
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- CURSOR LOGIC ---
+        const cursor = document.querySelector('.cursor-wrapper');
+        const cross = document.querySelector('.cursor-cross');
+
+        // Only enable custom cursor on non-touch devices
+        if (window.matchMedia("(hover: hover)").matches) {
+            window.addEventListener('mousemove', (e) => {
+                gsap.to(cursor, {
+                    x: e.clientX,
+                    y: e.clientY,
+                    duration: 0.1,
+                    ease: "power2.out"
+                });
+            });
+
+            // Hover interactions
+            document.querySelectorAll('[data-hover]').forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+            });
+        } else {
+            // Restore default cursor on touch devices
+            document.querySelectorAll('*').forEach(el => el.style.cursor = 'auto');
+            cursor.style.display = 'none';
+        }
+
+        // --- PARALLAX & ANIMATIONS ---
+
+        // 1. Hero Background Parallax
+        gsap.to('.hero-bg-image', {
+            scale: 1.3,
+            y: 100,
+            scrollTrigger: {
+                trigger: "header",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+
+        // 2. Marquee Animation
+        let marqueeTween = gsap.to("#marquee-track", {
+            xPercent: -33.33,
+            repeat: -1,
+            duration: 20,
+            ease: "linear"
+        });
+
+        ScrollTrigger.create({
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            onUpdate: (self) => {
+                let speed = 1 + Math.abs(self.getVelocity() / 30);
+                gsap.to(marqueeTween, { timeScale: speed, duration: 0.2 });
+                gsap.delayedCall(0.2, () => gsap.to(marqueeTween, { timeScale: 1, duration: 0.5 }));
+            }
+        });
+
+        // 3. Intro Reveal
         window.addEventListener('load', () => {
-            const tl = gsap.timeline();
-            tl.to('.preloader', {
-                yPercent: -100,
-                duration: 1.2,
-                delay: 0.5,
-                ease: 'power4.inOut'
-            });
-            
-            // Text Reveal Animation
-            tl.from('main > *', {
-                y: 50,
+            gsap.from('.hero-title', {
+                y: 100,
                 opacity: 0,
-                duration: 1,
-                stagger: 0.1,
-                ease: 'power3.out'
-            }, "-=0.5");
-        });
-
-        // Cursor Logic
-        const cursorDot = document.querySelector('.cursor-dot');
-        const cursorRing = document.querySelector('.cursor-ring');
-        
-        window.addEventListener('mousemove', (e) => {
-            gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.1 });
-            gsap.to(cursorRing, { x: e.clientX, y: e.clientY, duration: 0.3 });
-        });
-
-        document.querySelectorAll('.hoverable').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                gsap.to(cursorRing, { scale: 1.5, borderColor: '#fff' });
-            });
-            el.addEventListener('mouseleave', () => {
-                gsap.to(cursorRing, { scale: 1, borderColor: 'rgba(255,255,255,0.5)' });
+                duration: 2,
+                stagger: 0.2,
+                ease: "power4.out",
+                delay: 0.2
             });
         });
+
     </script>
 </body>
 </html>
