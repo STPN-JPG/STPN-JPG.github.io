@@ -1,543 +1,442 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <title>STPN-D | THE PHOTO MONSTER</title>
+    <meta name="theme-color" content="#050505">
+    <title>LUKAS NOVAK | THE FAME MONSTER</title>
 
+    <!-- ZDE VLOŽTE LINK Z ADOBE FONTS (TYPEKIT) -->
+    <link rel="stylesheet" href="https://use.typekit.net/udk0axs.css">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Google Fonts: Bodoni Moda (Art Contrast) -->
+    <!-- Google Fonts: Bodoni Moda -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://use.typekit.net/udk0axs.css">
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400;1,6..96,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&display=swap" rel="stylesheet">
 
     <!-- Ikony -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- GSAP -->
+    <!-- GSAP & SplitType (pro textové efekty) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: '#050505',
+                        text: '#e0e0e0',
+                        accent: '#8a0000',
+                    },
+                    fontFamily: {
+                        'tfm': ['"news-gothic-std"', 'sans-serif'],
+                        'art': ['"Bodoni Moda"', 'serif'],
+                    },
+                    transitionTimingFunction: {
+                        'expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        /* --- PALETA & ZÁKLAD --- */
+        /* --- ZÁKLAD --- */
         :root {
-            --bg-void: #000000;
-            --text-main: #e0e0e0;
-            --blood: #8a0000; /* Gaga Red */
-
-            --font-tfm: "news-gothic-std", sans-serif;
-            --font-art: "Bodoni Moda", serif;
-            --ease-fashion: cubic-bezier(0.19, 1, 0.22, 1);
-        }
-
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: none !important; /* Hide default cursor everywhere */
-        }
-
-        html {
-            scroll-behavior: smooth;
-            background-color: var(--bg-void);
+            --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
         }
 
         body {
-            font-family: var(--font-tfm);
-            background-color: var(--bg-void);
-            color: var(--text-main);
+            background-color: #050505;
+            color: #e0e0e0;
             overflow-x: hidden;
+            font-family: "news-gothic-std", sans-serif;
             -webkit-font-smoothing: antialiased;
-            min-height: 100vh;
         }
 
-        /* --- MONSTER TYPOGRAPHY --- */
-        .tfm-bold {
-            font-family: var(--font-tfm);
+        /* --- TYPOGRAPHY UTILS --- */
+        .display-text {
+            font-family: "news-gothic-std", sans-serif;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: -0.05em; /* Extreme tight tracking */
+            line-height: 0.85;
+            letter-spacing: -0.04em;
         }
 
-        .art-italic {
-            font-family: var(--font-art);
-            font-weight: 400;
-            font-style: italic;
+        .outline-text {
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+            transition: all 0.5s ease;
         }
 
-        /* CROSS ICON REPLACEMENT */
-        .cross-icon {
-            display: inline-block;
-            width: 0.65em;
-            height: 0.8em;
-            fill: currentColor;
-            vertical-align: baseline;
+        .group:hover .outline-text {
+            -webkit-text-stroke: 1px #fff;
+            opacity: 1;
         }
 
-        /* --- MONSTER CURSOR (Industrial Crosshair) --- */
-        .cursor-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 9999;
-            mix-blend-mode: exclusion;
+        /* --- IMAGE REVEALS --- */
+        .reveal-container {
+            overflow: hidden;
+            position: relative;
         }
 
-        .cursor-cross {
-            position: absolute;
-            transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
-            transition: transform 0.2s ease;
+        .reveal-mask {
+            clip-path: inset(0 0 100% 0); /* Skryto */
+            transition: clip-path 1.2s var(--ease-out-expo);
         }
 
-            .cursor-cross::before, .cursor-cross::after {
-                content: '';
-                position: absolute;
-                background-color: var(--blood);
-                transition: all 0.3s ease;
+            .reveal-mask.is-visible {
+                clip-path: inset(0 0 0 0); /* Odhaleno */
             }
 
-            /* Vertical line */
-            .cursor-cross::before {
-                top: 0;
-                left: 50%;
-                width: 2px;
-                height: 100%;
-                transform: translateX(-50%);
-            }
-            /* Horizontal line */
-            .cursor-cross::after {
-                top: 50%;
-                left: 0;
-                width: 100%;
-                height: 2px;
-                transform: translateY(-50%);
-            }
-
-        /* Hover State - Rotate and Expand */
-        body.hovering .cursor-cross {
-            transform: translate(-50%, -50%) rotate(45deg) scale(1.5);
+        .img-zoom {
+            transform: scale(1.3);
+            transition: transform 1.5s var(--ease-out-expo);
+            filter: grayscale(100%) contrast(1.2);
         }
 
-            body.hovering .cursor-cross::before,
-            body.hovering .cursor-cross::after {
-                background-color: white;
-            }
+        .reveal-mask.is-visible .img-zoom {
+            transform: scale(1);
+        }
 
+        .group:hover .img-zoom {
+            transform: scale(1.05);
+            filter: grayscale(0%) contrast(1.1);
+            transition: transform 0.8s ease, filter 0.5s ease;
+        }
 
-
+        /* --- ATMOSPHERE --- */
         .grain {
-            height: 100vh;
-            background-color: '#66666e';
-        }
-
-            .grain:after {
-                animation: grain 8s steps(10) infinite;
-                background-image: url('https://grainy-gradients.vercel.app/noise.svg');
-                content: "";
-                height: 300%;
-                width: 300%;
-                left: -100%;
-                top: -110%;
-                opacity: 0.8;
-                position: fixed;
-            }
-
-        @keyframes grain {
-            0%, 100% {
-                transform: translate(0, 0)
-            }
-
-            10% {
-                transform: translate(-5%, -10%)
-            }
-
-            20% {
-                transform: translate(-15%, 5%)
-            }
-
-            30% {
-                transform: translate(5%, -25%)
-            }
-
-            40% {
-                transform: translate(-5%, 25%)
-            }
-
-            50% {
-                transform: translate(-15%, 10%)
-            }
-
-            60% {
-                transform: translate(15%, 0%)
-            }
-
-            70% {
-                transform: translate(0%, 15%)
-            }
-
-            80% {
-                transform: translate(5%, 35%)
-            }
-
-            90% {
-                transform: translate(-10%, 10%)
-            }
-        }
-
-        /* --- TEXTURES (Latex & Noise) --- */
-        .latex-overlay {
             position: fixed;
             inset: 0;
-            /* Glossy reflection effect */
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.02) 100%);
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
             pointer-events: none;
-            z-index: 40;
-        }
-
-        .grain-overlay {
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 41;
-            opacity: 0.3;
+            z-index: 90;
             mix-blend-mode: overlay;
         }
 
-        /* --- HERO & LAYOUT --- */
-        header {
-            height: 100svh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-            border-bottom: 1px solid #222;
-        }
-
-        .hero-bg-image {
-            position: absolute;
-            inset: 0;
-            /* Darker, moodier image */
-            background-image: url('https://images.unsplash.com/photo-1675119711552-77d4c766ab0f?q=80&w=1170&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            filter: grayscale(100%) contrast(1.8) brightness(0.4);
-            z-index: 0;
-            transform: scale(1.1);
-        }
-
-        /* --- STATIC TYPOGRAPHY --- */
-        .hero-title {
-            font-family: var(--font-tfm);
-            font-weight: 700;
-            font-size: clamp(4rem, 16vw, 14rem);
-            line-height: 0.8;
-            letter-spacing: -0.06em;
-            color: #fff;
-            text-transform: uppercase;
-            text-shadow: 0 0 30px rgba(0,0,0,1);
-            position: relative;
-            z-index: 10;
-            mix-blend-mode: normal;
-            /* Snížená opacita podle požadavku */
-            opacity: 0.5;
-        }
-
-        .hero-subtitle {
-            font-family: var(--font-art);
-            font-style: italic;
-            font-size: clamp(1rem, 2vw, 1.5rem);
-            color: rgba(255,255,255,0.7);
-            z-index: 2;
-            letter-spacing: 0.05em;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.8);
-            margin-top: 2rem;
-        }
-
         /* --- MARQUEE --- */
-        .marquee-wrapper {
-            background: var(--bg-void);
-            padding: 20px 0;
-            border-top: 1px solid #333;
-            border-bottom: 1px solid #333;
+        .marquee-wrap {
             overflow: hidden;
+            display: flex;
             white-space: nowrap;
-            position: relative;
-            z-index: 5;
         }
 
-        .marquee-content {
-            display: inline-block;
-            animation: scroll-left 20s linear infinite; /* Automatický pohyb */
+        .marquee-inner {
+            display: flex;
+            animation: scroll 20s linear infinite;
         }
 
-        .marquee-item {
-            display: inline-block;
-            font-family: var(--font-tfm);
-            font-size: 3rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-right: 60px;
-            letter-spacing: -0.02em;
-            color: #333;
-            transition: color 0.3s;
-        }
-
-        .marquee-wrapper:hover .marquee-item {
-            color: white;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
-        }
-
-        /* Animace pro Marquee */
-        @keyframes scroll-left {
+        @keyframes scroll {
             0% {
                 transform: translateX(0);
             }
 
             100% {
-                transform: translateX(-33.33%);
+                transform: translateX(-50%);
             }
-            /* Posun o 1/3 (jeden blok) */
-        } text-shadow: 0 0 10px rgba(255,255,255,0.5);
         }
 
-        /* --- CONTENT BOX --- */
-        .content-section {
-            padding: 150px 24px;
-            text-align: center;
-            position: relative;
-            z-index: 10;
-            min-height: 80vh;
+        /* --- LOADING SCREEN --- */
+        .preloader {
+            position: fixed;
+            inset: 0;
+            background: #050505;
+            z-index: 100;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(to bottom, #000 0%, #0a0a0a 100%);
-        }
-
-        .notify-btn {
-            display: inline-block;
-            padding: 20px 60px;
-            border: 1px solid white;
-            color: white;
-            font-family: var(--font-tfm);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            font-size: 0.8rem;
-            transition: all 0.2s cubic-bezier(0.19, 1, 0.22, 1);
-            background: transparent;
-            cursor: none; /* Custom cursor handles this */
-            margin-top: 4rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-            .notify-btn::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: var(--blood);
-                transition: left 0.3s ease;
-                z-index: -1;
-                mix-blend-mode: multiply;
-            }
-
-            .notify-btn:hover::after {
-                left: 0;
-            }
-
-            .notify-btn:hover {
-                border-color: var(--blood);
-                text-shadow: 0 0 10px rgba(255,0,0,0.5);
-            }
-
-        /* --- GLITCH EFFECT --- */
-        .glitch-effect {
-            position: relative;
-        }
-        /* Odebrán hover efekt glitch animace */
-
-        /* --- FOOTER --- */
-        footer {
-            background-color: #000;
-            color: #444;
-            padding: 40px;
-            text-align: center;
-            font-family: var(--font-tfm);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            border-top: 1px solid #111;
+            clip-path: inset(0 0 0 0);
         }
     </style>
 </head>
-<body>
+<body class="bg-bg text-text">
 
-    <!-- CUSTOM CURSOR -->
-    <div class="cursor-wrapper">
-        <div class="cursor-cross"></div>
-    </div>
+    <!-- FX -->
+    <div class="grain"></div>
 
-    <!-- TEXTURES -->
-    <div class="grain-overlay grain"></div>
-    <div class="latex-overlay"></div>
-
-    <!-- HERO -->
-    <header id="home">
-        <div class="hero-bg-image"></div>
-
-        <!-- TOP UI -->
-        <div class="absolute top-8 left-8 text-[10px] uppercase tracking-[0.3em] text-gray-500 z-20">Vol. I — Manifesto</div>
-        <div class="absolute top-8 right-8 text-[10px] uppercase tracking-[0.3em] text-gray-500 z-20">Jihlava 2025</div>
-
-        <!-- MAIN TITLE (STATIC, LESS OPAQUE) -->
-        <div class="relative z-10 flex flex-col items-center w-full">
-            <h1 class="hero-title text-center">
-                THE PHOTO<br>
-                MONS<svg class="cross-icon" viewBox="0 0 100 100" preserveAspectRatio="none">
-                    <path d="M40 0 H60 V30 H100 V50 H60 V100 H40 V50 H0 V30 H40 Z" fill="currentColor" />
-                </svg>ER
+    <!-- PRELOADER -->
+    <div class="preloader">
+        <div class="overflow-hidden">
+            <h1 class="display-text text-6xl md:text-9xl text-white preloader-text translate-y-full">
+                MONSTER
             </h1>
-
-            <p class="font-art italic text-lg md:text-2xl text-gray-400 mt-12 max-w-lg leading-relaxed mix-blend-lighten">
-                "I want your ugly, I want your disease."
-            </p>
-        </div>
-
-        <!-- SCROLL INDICATOR -->
-        <div class="absolute bottom-12 flex flex-col items-center gap-4 z-20">
-            <span class="text-[9px] uppercase tracking-[0.3em] text-red-700 animate-pulse">Scroll to Bleed</span>
-            <div class="w-[1px] h-16 bg-gradient-to-b from-red-700 to-transparent"></div>
-        </div>
-    </header>
-
-    <!-- MARQUEE: THE FEARS -->
-    <div class="marquee-wrapper">
-        <div class="marquee-content" id="marquee-track">
-            <div class="marquee-item">Fear of Truth <span class="text-red-900">†</span> Fear of Love <span class="text-red-900">†</span> Fear of Sex <span class="text-red-900">†</span> Fear of Death <span class="text-red-900">†</span></div>
-            <div class="marquee-item">Fear of Truth <span class="text-red-900">†</span> Fear of Love <span class="text-red-900">†</span> Fear of Sex <span class="text-red-900">†</span> Fear of Death <span class="text-red-900">†</span></div>
-            <div class="marquee-item">Fear of Truth <span class="text-red-900">†</span> Fear of Love <span class="text-red-900">†</span> Fear of Sex <span class="text-red-900">†</span> Fear of Death <span class="text-red-900">†</span></div>
         </div>
     </div>
 
-    <!-- COMING SOON CONTENT -->
-    <center>
-        <br />
-        <section class="content-section">
-            <div class="max-w-2xl text-center">
-                <div class="inline-block border border-gray-800 px-4 py-1 mb-8">
-                    <span class="text-[10px] uppercase tracking-[0.4em] text-red-900">Status: Classified</span>
+    <!-- NAV -->
+    <nav class="fixed top-0 left-0 w-full p-6 md:p-8 flex justify-between items-start z-50 mix-blend-difference">
+        <a href="#" class="font-tfm font-bold text-2xl tracking-tighter uppercase leading-none">
+            LN<span class="text-accent">.</span>
+        </a>
+        <div class="hidden md:flex flex-col items-end gap-1 font-tfm text-[10px] uppercase tracking-widest text-gray-400">
+            <span>The Fame Monster</span>
+            <span>Est. 2025</span>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <!-- HERO SECTION -->
+        <header class="relative min-h-screen flex flex-col justify-center overflow-hidden pt-20 pb-12 px-6 md:px-12 border-b border-white/5">
+
+            <div class="w-full max-w-[1800px] mx-auto relative z-10">
+
+                <!-- Subtitle -->
+                <div class="overflow-hidden mb-4">
+                    <p class="font-art italic text-2xl text-gray-500 anim-text translate-y-full">The Manifesto of</p>
                 </div>
 
-                <h2 class="hero-title text-[3rem] md:text-[5rem] mb-8 text-[#222]" style="color: #222; text-shadow: none; opacity: 1;">
-                    GALLERY<br>LOCKED
+                <!-- KINETIC TITLE -->
+                <div class="relative">
+                    <div class="overflow-hidden">
+                        <h1 class="display-text text-[15vw] leading-[0.8] text-white anim-title-1 translate-y-full">
+                            THE FAME
+                        </h1>
+                    </div>
+                    <div class="overflow-hidden flex justify-end">
+                        <h1 class="display-text text-[15vw] leading-[0.8] outline-text text-transparent anim-title-2 translate-y-full" style="-webkit-text-stroke: 2px #333;">
+                            MONSTER
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- Hero Image -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[50vh] md:h-[70vh] z-[-1] opacity-60">
+                    <div class="reveal-container h-full w-full">
+                        <div class="reveal-mask h-full w-full is-visible">
+                            <img src="https://images.unsplash.com/photo-1675119711552-77d4c766ab0f?q=80&w=2000&auto=format&fit=crop"
+                                 class="w-full h-full object-cover img-zoom"
+                                 alt="Hero Texture">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-8 left-6 md:left-12 overflow-hidden">
+                <span class="block font-tfm text-[10px] uppercase tracking-widest text-gray-500 anim-text translate-y-full">
+                    ( Scroll to Bleed )
+                </span>
+            </div>
+        </header>
+
+        <!-- INTRO / MANIFESTO -->
+        <section class="py-32 px-6 md:px-12 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+            <div class="md:col-span-5 md:col-start-2">
+                <p class="font-tfm text-xs font-bold uppercase tracking-[0.2em] text-accent mb-6">Chapter I</p>
+                <h2 class="display-text text-4xl md:text-6xl mb-8 leading-none">
+                    I've Killed My<br>Former Self
                 </h2>
-
-                <p class="font-art text-xl text-gray-500 leading-loose italic">
-                    Expanding the world of The Fame by revealing its shadowy side.<br>
-                    Cold electropop. Industrial silence. Unapologetic art.
+            </div>
+            <div class="md:col-span-5">
+                <p class="font-art text-xl text-gray-400 leading-relaxed">
+                    "This is about the monsters that come with fame. Fear of Sex. Fear of Love. Fear of Truth. A collection of visual art exploring the dark side."
                 </p>
-
-                <button class="notify-btn" data-hover onclick="alert('Welcome to the Monster Ball.')">
-                    Enter The Void
-                </button>
             </div>
         </section>
-        <br />
-    </center>
 
-    <!-- FOOTER -->
-    <footer>
-        &copy; 2025 STPN-D <span class="text-red-900">†</span> THE PHOTO MONSTER
-    </footer>
+        <!-- PROJECTS (Parallax & Reveal) -->
+        <section class="py-12 px-4 md:px-8">
+
+            <!-- Project 01 -->
+            <div class="group mb-40 relative">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                    <div class="md:col-span-1 hidden md:block font-tfm text-xs text-gray-600 pt-4">01</div>
+
+                    <div class="md:col-span-5 relative z-10 pt-12 md:pt-32">
+                        <div class="overflow-hidden">
+                            <h3 class="display-text text-7xl md:text-9xl mb-2 text-white mix-blend-difference">LOVE</h3>
+                        </div>
+                        <p class="font-art text-gray-400 pl-2 border-l border-white/20">Bad Romance</p>
+                    </div>
+
+                    <div class="md:col-span-6 md:-ml-20">
+                        <div class="reveal-container h-[60vh] md:h-[80vh] w-full">
+                            <div class="reveal-mask h-full w-full scroll-reveal">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1500&auto=format&fit=crop"
+                                     class="w-full h-full object-cover img-zoom parallax-img"
+                                     alt="Bad Romance">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 02 -->
+            <div class="group mb-40 relative">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                    <div class="md:col-span-1 hidden md:block pt-4 md:order-last text-right font-tfm text-xs text-gray-600">02</div>
+
+                    <div class="md:col-span-7 h-[50vh] md:h-[70vh] md:order-1 order-2">
+                        <div class="reveal-container h-full w-full">
+                            <div class="reveal-mask h-full w-full scroll-reveal">
+                                <img src="https://images.unsplash.com/photo-1605142859862-978be7eba909?q=80&w=1500&auto=format&fit=crop"
+                                     class="w-full h-full object-cover img-zoom parallax-img"
+                                     alt="Alejandro">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-4 relative z-10 pt-12 md:pt-32 order-1 md:order-2 md:-ml-12 text-right md:text-left">
+                        <div class="overflow-hidden">
+                            <h3 class="display-text text-7xl md:text-9xl mb-2 text-white mix-blend-difference">SEX</h3>
+                        </div>
+                        <p class="font-art text-gray-400 pr-2 md:pr-0 md:pl-2 border-r md:border-r-0 md:border-l border-white/20">Alejandro</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 03 -->
+            <div class="group mb-20 relative">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                    <div class="md:col-span-1 hidden md:block font-tfm text-xs text-gray-600">03</div>
+
+                    <div class="md:col-span-4 relative z-10">
+                        <div class="overflow-hidden">
+                            <h3 class="display-text text-7xl md:text-9xl mb-2 text-white mix-blend-difference">DEATH</h3>
+                        </div>
+                        <p class="font-art text-gray-400 pl-2 border-l border-white/20">Monster</p>
+                    </div>
+
+                    <div class="md:col-span-7 h-[50vh] md:-ml-12">
+                        <div class="reveal-container h-full w-full">
+                            <div class="reveal-mask h-full w-full scroll-reveal">
+                                <img src="https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?q=80&w=1500&auto=format&fit=crop"
+                                     class="w-full h-full object-cover img-zoom parallax-img"
+                                     alt="Monster">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- FOOTER MARQUEE -->
+        <div class="py-16 bg-white text-black border-y border-black overflow-hidden">
+            <div class="marquee-wrap">
+                <div class="marquee-inner font-tfm font-bold text-6xl md:text-9xl uppercase tracking-tighter leading-none">
+                    Don't Call My Name — Alejandro — Monster — Teeth — Bad Romance —&nbsp;
+                </div>
+                <div class="marquee-inner font-tfm font-bold text-6xl md:text-9xl uppercase tracking-tighter leading-none" aria-hidden="true">
+                    Don't Call My Name — Alejandro — Monster — Teeth — Bad Romance —&nbsp;
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER CONTACT -->
+        <footer id="contact" class="py-40 px-6 bg-bg text-center">
+            <div class="max-w-3xl mx-auto">
+                <p class="font-art italic text-2xl text-gray-500 mb-12">
+                    "I'm your biggest fan, I'll follow you until you love me."
+                </p>
+
+                <a href="mailto:hello@lukasnovak.com" class="display-text text-5xl md:text-8xl hover:text-accent transition-colors duration-300 block mb-20">
+                    CONTACT
+                </a>
+
+                <div class="flex justify-between items-end border-t border-white/10 pt-8">
+                    <div class="text-left font-tfm text-xs uppercase tracking-widest text-gray-600">
+                        <p>Prague, CZ</p>
+                        <p>© 2025</p>
+                    </div>
+                    <div class="flex gap-8 font-tfm text-xs uppercase tracking-widest text-gray-400">
+                        <a href="#" class="hover:text-white transition-colors">Instagram</a>
+                        <a href="#" class="hover:text-white transition-colors">Behance</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </main>
 
     <script>
         // Init GSAP
         gsap.registerPlugin(ScrollTrigger);
 
-        // --- CURSOR LOGIC ---
-        const cursor = document.querySelector('.cursor-wrapper');
-        const cross = document.querySelector('.cursor-cross');
+        // --- PRELOADER & INTRO ---
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
 
-        // Only enable custom cursor on non-touch devices
-        if (window.matchMedia("(hover: hover)").matches) {
-            window.addEventListener('mousemove', (e) => {
-                gsap.to(cursor, {
-                    x: e.clientX,
-                    y: e.clientY,
-                    duration: 0.1,
-                    ease: "power2.out"
-                });
-            });
+            // Text fly up
+            tl.to('.preloader-text', {
+                y: 0,
+                duration: 1,
+                ease: "power4.out"
+            })
+                // Reveal Screen
+                .to('.preloader', {
+                    clipPath: 'inset(0 0 100% 0)',
+                    duration: 1.2,
+                    ease: "power4.inOut",
+                    delay: 0.2
+                })
+                // Hero Elements Reveal
+                .to('.anim-text', {
+                    y: 0,
+                    duration: 1,
+                    stagger: 0.1,
+                    ease: "power3.out"
+                }, "-=0.5")
+                .to('.anim-title-1', { y: 0, duration: 1.2, ease: "power3.out" }, "-=0.8")
+                .to('.anim-title-2', { y: 0, duration: 1.2, ease: "power3.out" }, "-=1");
+        });
 
-            // Hover interactions
-            document.querySelectorAll('[data-hover]').forEach(el => {
-                el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-                el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-            });
-        } else {
-            // Restore default cursor on touch devices
-            document.querySelectorAll('*').forEach(el => el.style.cursor = 'auto');
-            cursor.style.display = 'none';
-        }
+        // --- SCROLL ANIMATIONS ---
 
-        // --- PARALLAX & ANIMATIONS ---
-
-        // 1. Hero Background Parallax
-        gsap.to('.hero-bg-image', {
-            scale: 1.3,
-            y: 100,
+        // 1. Kinetic Typography (Hero)
+        // Moves texts in opposite directions on scroll
+        gsap.to('.anim-title-1', {
+            xPercent: -20,
+            ease: "none",
             scrollTrigger: {
                 trigger: "header",
                 start: "top top",
                 end: "bottom top",
-                scrub: true
+                scrub: 1
+            }
+        });
+        gsap.to('.anim-title-2', {
+            xPercent: 20,
+            ease: "none",
+            scrollTrigger: {
+                trigger: "header",
+                start: "top top",
+                end: "bottom top",
+                scrub: 1
             }
         });
 
-        // 2. Marquee Animation
-        let marqueeTween = gsap.to("#marquee-track", {
-            xPercent: -33.33,
-            repeat: -1,
-            duration: 20,
-            ease: "linear"
+        // 2. Image Reveals (Masking Effect)
+        const revealElements = document.querySelectorAll('.scroll-reveal');
+        revealElements.forEach(el => {
+            ScrollTrigger.create({
+                trigger: el,
+                start: "top 80%", // Kdy se animace spustí
+                onEnter: () => el.classList.add('is-visible'),
+                once: true // Přehrát jen jednou
+            });
         });
 
-        ScrollTrigger.create({
-            trigger: "body",
-            start: "top top",
-            end: "bottom bottom",
-            onUpdate: (self) => {
-                let speed = 1 + Math.abs(self.getVelocity() / 30);
-                gsap.to(marqueeTween, { timeScale: speed, duration: 0.2 });
-                gsap.delayedCall(0.2, () => gsap.to(marqueeTween, { timeScale: 1, duration: 0.5 }));
-            }
-        });
-
-        // 3. Intro Reveal
-        window.addEventListener('load', () => {
-            gsap.from('.hero-title', {
-                y: 100,
-                opacity: 0,
-                duration: 2,
-                stagger: 0.2,
-                ease: "power4.out",
-                delay: 0.2
+        // 3. Parallax Images
+        const parallaxImages = document.querySelectorAll('.parallax-img');
+        parallaxImages.forEach(img => {
+            gsap.to(img, {
+                yPercent: 15,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: img.closest('.group'),
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
             });
         });
 
