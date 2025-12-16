@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="cs" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#030303">
+    <title>STPN.JPG | THE MONSTER DIARIES</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Bodoni (TFM), Inter (School), Cormorant (Emotion), Nothing You Could Do (Handwritten Notes) -->
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;0,900;1,400;1,900&family=Inter:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
+
+    <!-- Lenis CSS (Smooth Scroll) -->
+    <style>
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        .lenis.lenis-scrolling iframe { pointer-events: none; }
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: '#030303',
+                        paper: '#e6e6e6',
+                        blood: '#900000',
+                        graytext: '#666666',
+                        grid: '#1a1a1a'
+                    },
+                    fontFamily: {
+                        'sans': ['"Inter"', 'sans-serif'],
+                        'serif': ['"Bodoni Moda"', 'serif'],
+                        'poetry': ['"Cormorant Garamond"', 'serif'],
+                        'hand': ['"Nothing You Could Do"', 'cursive'],
+                        'mono': ['"Courier New"', 'Courier', 'monospace'],
+                    },
+                    cursor: {
+                        'none': 'none',
+                    },
+                    animation: {
+                        'float': 'float 8s ease-in-out infinite',
+                        'float-fast': 'float 4s ease-in-out infinite',
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 20s linear infinite',
+                        'glitch': 'glitch 1s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        glitch: {
+                            '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
+                            '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
+                            '62%': { transform: 'translate(0,0) skew(5deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- BASE --- */
+        body {
+            background-color: #030303;
+            color: #e6e6e6;
+            overflow-x: hidden;
+            width: 100%;
+            cursor: auto;
+        }
+
+        /* --- ATMOSPHERE LAYERS --- */
+        .noise-overlay {
+            position: fixed; inset: 0; pointer-events: none; z-index: 40;
+            opacity: 0.08;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+            mix-blend-mode: overlay;
+        }
+
+        .scanlines {
+            position: fixed; inset: 0; pointer-events: none; z-index: 41;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.3));
+            background-size: 100% 4px;
+            opacity: 0.15;
+        }
+
+        .vignette {
+            position: fixed; inset: 0; pointer-events: none; z-index: 42;
+            background: radial-gradient(circle, transparent 60%, #030303 100%);
+        }
+
+        /* --- TYPOGRAPHY --- */
+        .title-display {
+            font-family: "Bodoni Moda", serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            font-size: clamp(3rem, 13vw, 10rem);
+        }
+
+        .emotional-text {
+            font-family: "Cormorant Garamond", serif;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .handwritten {
+            font-family: "Nothing You Could Do", cursive;
+            transform: rotate(-2deg);
+        }
+
+        /* --- BRANDING STYLES --- */
+        .brand-logo {
+            font-family: "Bodoni Moda", serif;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: -0.05em;
+            line-height: 0.8;
+        }
+        
+        .brand-ext {
+            font-family: "Inter", sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        /* Hover effect for branding */
+        .branding-container:hover .brand-logo {
+            color: #900000;
+            text-shadow: 2px 2px 0px #fff;
+        }
+        .branding-container:hover .brand-ext {
+            background: #900000;
+            color: white;
+        }
+
+        /* --- IMAGES & FRAMES --- */
+        .photo-frame {
+            position: relative; overflow: hidden;
+            filter: grayscale(100%) contrast(1.1) brightness(0.9);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .group:hover .photo-frame {
+            filter: grayscale(0%) contrast(1) brightness(1);
+            transform: scale(0.99);
+        }
+
+        /* --- FILM STRIP --- */
+        .film-strip-wrapper { width: 100%; overflow: hidden; }
+        .film-strip { display: flex; gap: 1.5rem; width: max-content; }
+        .negative-frame {
+            width: 280px; aspect-ratio: 3/2; background: #111;
+            border-top: 15px solid #000; border-bottom: 15px solid #000;
+            position: relative; flex-shrink: 0;
+        }
+        .negative-frame::before, .negative-frame::after {
+            content: ''; position: absolute; left: 0; right: 0; height: 8px;
+            background-image: repeating-linear-gradient(90deg, #222 0, #222 6px, transparent 6px, transparent 12px);
+            opacity: 0.8;
+        }
+        .negative-frame::before { top: -12px; }
+        .negative-frame::after { bottom: -12px; }
+
+        /* --- CUSTOM CURSOR (DESKTOP ONLY) --- */
+        @media (hover: hover) and (pointer: fine) {
+            body { cursor: none; }
+            .cursor-main {
+                width: 10px; height: 10px; background: #e6e6e6; border-radius: 50%;
+                position: fixed; top: 0; left: 0; pointer-events: none; z-index: 100;
+                mix-blend-mode: difference;
+                transition: width 0.3s, height 0.3s; transform: translate(-50%, -50%);
+            }
+            body.hovering .cursor-main {
+                width: 60px; height: 60px; background: transparent; border: 1px solid #7a0000;
+                mix-blend-mode: normal;
+            }
+        }
+        @media (hover: none) {
+            .cursor-main { display: none !important; }
+        }
+
+        /* --- PRELOADER --- */
+        .preloader-curtain {
+            position: fixed; inset: 0; background: #030303; z-index: 999;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+        }
+        
+        .intro-word {
+            display: none;
+            font-family: "Inter", sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: #7a0000;
+        }
+
+        /* --- ALIVE ELEMENTS --- */
+        .hud-line {
+            position: fixed; background: rgba(255,255,255,0.05); z-index: 30; pointer-events: none;
+        }
+        .blinking-light {
+            width: 4px; height: 4px; background: #7a0000; border-radius: 50%;
+            animation: pulse-fast 2s infinite; display: inline-block;
+        }
+        .fear-container h2 {
+            mix-blend-mode: exclusion;
+        }
+
+        /* --- SUBLIMINAL MONITOR (Vertical Right Side) --- */
+        #monitor-panel {
+            position: fixed;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            z-index: 35;
+            display: none;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 1rem;
+            pointer-events: none;
+        }
+        @media (min-width: 768px) {
+            #monitor-panel { display: flex; }
+        }
+
+        .monitor-block {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-family: "Courier New", monospace;
+            font-size: 10px;
+            color: #444;
+            letter-spacing: 0.1em;
+            border-left: 1px solid #222;
+            padding-left: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .flash-word-container {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg); 
+            text-align: left;
+            min-height: 150px;
+        }
+
+        .flash-word {
+            font-family: "Bodoni Moda", serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #900000;
+            font-size: 1.2rem;
+            opacity: 0.5;
+            text-shadow: 0 0 8px rgba(144, 0, 0, 0.4);
+            transition: opacity 0.1s;
+        }
+        .flash-visible {
+            opacity: 1;
+            text-shadow: 0 0 15px rgba(144, 0, 0, 0.9);
+        }
+    </style>
+</head>
+<body class="selection:bg-blood selection:text-white">
+
+    <!-- ATMOSPHERE -->
+    <div class="noise-overlay"></div>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+    <div class="cursor-main"></div>
+
+    <!-- SIDE MONITOR (RIGHT SIDE) -->
+    <div id="monitor-panel">
+        <div class="monitor-block">
+            <span>SYS_DIAGNOSTICS</span>
+            <span class="w-1 h-8 bg-gray-800 relative overflow-hidden">
+                <span class="absolute top-0 left-0 w-full h-full bg-blood animate-pulse opacity-50"></span>
+            </span>
+        </div>
+        <div class="monitor-block" style="border-left-color: #7a0000;">
+            <span>MENTAL_STATE</span>
+            <div class="flash-word-container">
+                <span id="subliminal-text" class="flash-word">NOISE</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- HUD / LIVE ELEMENTS -->
+    <div class="fixed left-6 top-1/2 -translate-y-1/2 w-[1px] h-32 bg-white/10 hidden md:block z-30">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-white/30"></div>
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-white/30"></div>
+    </div>
+    <div class="fixed right-6 bottom-8 font-mono text-[9px] text-gray-600 z-30 hidden md:flex flex-col items-end gap-1">
+        <span>SYS: ONLINE</span>
+        <span><span class="blinking-light mr-1"></span>REC</span>
+    </div>
+
+    <!-- PRELOADER -->
+    <div class="preloader-curtain">
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+            <span class="text-[30vw] font-bold text-[#080808] leading-none select-none">LOADING</span>
+        </div>
+
+        <div class="text-center space-y-8 px-6 relative z-10 w-full max-w-lg">
+            <div class="h-6 overflow-hidden relative">
+                <div class="intro-word-container flex justify-center items-center h-full text-xs font-mono uppercase tracking-[0.5em] text-blood">
+                    <span class="intro-word">ANXIETY</span>
+                    <span class="intro-word">PRESSURE</span>
+                    <span class="intro-word">NOISE</span>
+                    <span class="intro-word">DEVELOPING...</span>
+                </div>
+            </div>
+
+            <h1 class="font-serif italic text-3xl md:text-5xl text-white preloader-text opacity-0 leading-tight">
+                "Photography is the only way<br>I can silence the monster."
+            </h1>
+
+            <div class="w-full relative">
+                <div class="h-[1px] w-full bg-gray-800">
+                    <div class="h-full bg-blood preloader-bar w-0"></div>
+                </div>
+                <div class="flex justify-between mt-2 font-mono text-[9px] text-gray-500">
+                    <span>SYSTEM_BOOT</span>
+                    <span><span class="loader-percent">0</span>%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAV -->
+    <nav class="fixed top-0 w-full p-6 md:p-10 flex justify-between items-start z-40 mix-blend-difference text-white">
+        <!-- BRANDING: ZMENŠENO PRO ZABRÁNĚNÍ PŘEKRYVU -->
+        <a href="#" class="branding-container block hover-trigger group relative">
+            <div class="flex items-baseline">
+                <span class="brand-logo text-3xl md:text-4xl text-white transition-all duration-300">STPN</span>
+                <span class="brand-ext text-[10px] md:text-xs bg-white text-black px-1 py-0.5 ml-1 transition-all duration-300 transform -translate-y-1 rotate-[-5deg] inline-block">.JPG</span>
+            </div>
+            <div class="h-[1px] w-0 bg-blood group-hover:w-full transition-all duration-500 ease-out mt-1"></div>
+            <span class="block text-[7px] font-sans tracking-[0.2em] text-gray-400 mt-1 uppercase group-hover:text-white transition-colors">
+                Raw Data
+            </span>
+        </a>
+
+        <div class="flex flex-col items-end text-[9px] font-mono uppercase tracking-widest gap-1 text-gray-400">
+            <span class="text-white">The Fame Monster Era</span>
+            <span>Semestr 01 // Semester 02 Pending</span>
+        </div>
+    </nav>
+
+    <main id="smooth-wrapper">
+
+        <!-- HERO: THE CONFLICT -->
+        <header class="min-h-[90vh] flex flex-col justify-center px-4 md:px-20 relative pt-32 overflow-hidden">
+            
+            <div class="absolute top-20 left-10 text-8xl text-blood opacity-10 font-serif animate-float decoration-element pointer-events-none">†</div>
+            <div class="absolute bottom-40 right-10 text-6xl text-gray-800 opacity-20 font-sans animate-float-delayed decoration-element pointer-events-none select-none">X</div>
+            <div class="absolute top-1/2 right-1/4 w-64 h-64 border border-white/5 rounded-full animate-spin-slow pointer-events-none"></div>
+
+            <div class="relative z-10">
+                <div class="flex items-center gap-4 mb-6 hero-anim">
+                    <span class="h-[1px] w-8 bg-blood"></span>
+                    <p class="font-sans text-[10px] text-blood uppercase tracking-[0.3em]">Confession No. 01</p>
+                </div>
+                
+                <h1 class="title-display text-white hero-anim cursor-none relative z-10">
+                    PERFECTION IS<br>
+                    A <span class="text-transparent" style="-webkit-text-stroke: 1px #e6e6e6;">DISEASE</span>
+                </h1>
+                
+                <div class="grid grid-cols-1 md:grid-cols-12 mt-16 gap-12">
+                    <div class="md:col-span-7 hero-anim opacity-0 relative">
+                        <div class="absolute -top-8 -left-2 font-hand text-blood text-2xl rotate-[-5deg] opacity-80 z-20">
+                            Who am I kidding?
+                        </div>
+                        <p class="emotional-text text-xl md:text-3xl text-gray-300 leading-relaxed relative z-10">
+                            "Škola mě nutí vidět svět v mřížkách, histogramech a pravidlech. Ale já ho vidím v chaosu, stínech a rozbitém skle. Tohle je můj deník úniku."
+                        </p>
+                    </div>
+                    <div class="md:col-span-5 flex items-end justify-start md:justify-end hero-anim opacity-0">
+                        <div class="border-l border-white/20 pl-6 font-mono text-[9px] text-gray-500 uppercase space-y-2">
+                            <p>Status: <span class="text-white animate-pulse">Unstable</span></p>
+                            <p>Location: <span class="text-white">Darkroom 04</span></p>
+                            <p>Focus: <span class="text-blood">Lost</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- SECTION: THOUGHTS & FEAR INTERLUDE -->
+        <section class="py-24 px-4 md:px-16 relative">
+            
+            <div class="mb-40 max-w-3xl mx-auto text-center relative z-20">
+                <div class="mb-10 flex flex-col items-center">
+                    <span class="text-gray-500 font-mono text-[10px] block mb-2 tracking-widest">[ INTRUSIVE THOUGHT ]</span>
+                    <span class="text-blood text-lg animate-bounce">↓</span>
+                </div>
+
+                <div class="relative inline-block">
+                    <span class="absolute -top-4 -left-4 text-4xl text-white/5 font-serif">"</span>
+                    <p class="emotional-text text-xl md:text-4xl text-gray-200 leading-relaxed px-4">
+                        Profesor řekl, že kompozice je bezchybná. Ale když se na to dívám, necítím nic. Je to jen beton a sklo. Vyfotil jsem to pro známku, ne pro sebe. Cítím se jako podvodník.
+                    </p>
+                    <span class="absolute -bottom-8 -right-4 text-4xl text-white/5 font-serif">"</span>
+                </div>
+                
+                <div class="mt-12">
+                    <span class="font-hand text-2xl text-blood rotate-[-2deg] inline-block opacity-90 border-b border-blood pb-1">Where is the soul?</span>
+                </div>
+            </div>
+
+            <!-- FEAR SECTION -->
+            <div class="py-32 relative overflow-hidden flex items-center justify-center min-h-[50vh] bg-bg fear-container">
+                <div class="relative z-10 mix-blend-difference">
+                    <h2 class="text-[35vw] font-bold font-sans text-white leading-none tracking-tighter select-none opacity-90">
+                        FEAR
+                    </h2>
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center z-0">
+                    <div class="marquee-wrap opacity-60 w-full transform -rotate-3 bg-white text-black py-4">
+                        <p class="font-serif italic text-3xl md:text-6xl whitespace-nowrap" id="fear-scrolling-text">
+                            I'm dancing in the dark — I'm dancing in the dark — I'm dancing in the dark — I'm dancing in the dark —
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 2: OBSESSION -->
+            <div class="mt-32 relative">
+                <div class="absolute top-0 left-0 w-full h-[1px] bg-white/5"></div>
+                <div class="absolute -top-2 left-[20%] w-[1px] h-4 bg-blood"></div>
+
+                <div class="flex items-end justify-between mb-12 pt-8">
+                    <div>
+                        <span class="text-blood font-mono text-[10px] block mb-2">[ 02 ]</span>
+                        <h2 class="font-sans text-2xl md:text-3xl uppercase tracking-tighter text-white">My Obsessions</h2>
+                    </div>
+                    <span class="font-mono text-[9px] text-blood border border-blood/30 px-3 py-1 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-blood rounded-full animate-pulse"></span>
+                        RAW EMOTION
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
+                    <div class="flex flex-col justify-center order-2 md:order-1">
+                        <h3 class="title-display text-5xl md:text-7xl mb-6 text-white leading-[0.85]">Music<br>Obsession</h3>
+                        <p class="emotional-text text-lg md:text-xl text-gray-300 leading-relaxed">
+                            Když škola skončí, nasazuju sluchátka. Při pouštění hudby hledám neony, samotu a lidi, kteří vypadají stejně ztraceně jako já. <br><br>
+                            <span class="text-blood font-serif italic border-b border-blood/50 pb-1">Tohle nikdo neznámkuje. Tohle je pro mě.</span>
+                        </p>
+                        <div class="mt-8 font-mono text-[9px] text-gray-500 uppercase tracking-widest border-l border-gray-700 pl-4 space-y-1">
+                            <p>Playlist: The Fame Monster</p>
+                            <p>Volume: 100%</p>
+                            <p>Reality: Disconnected</p>
+                        </div>
+                    </div>
+
+                    <div class="group hover-trigger order-1 md:order-2 relative">
+                        <div class="absolute -top-2 -left-2 w-4 h-4 border-l border-t border-white/50 z-20"></div>
+                        <div class="absolute -bottom-2 -right-2 w-4 h-4 border-r border-b border-white/50 z-20"></div>
+
+                        <div class="photo-frame h-[50vh] md:h-[60vh] w-full bg-[#111] rotate-1 group-hover:rotate-0 transition-transform duration-500">
+                            <img src="https://images.unsplash.com/photo-1599407950360-8b8642d423dc?q=80&w=1200&auto=format&fit=crop" class="w-full h-full object-cover" alt="Night Portrait">
+                        </div>
+                        <div class="flex justify-between items-start mt-4 border-t border-white/10 pt-2">
+                            <h3 class="font-serif text-xl italic text-blood">"Bad Romance"</h3>
+                            <span class="font-mono text-[10px] text-gray-600">3:00 AM</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- DARKROOM -->
+        <section class="py-24 bg-[#080808] border-t border-white/5 overflow-hidden relative">
+            <div class="absolute top-10 right-10 text-[10rem] font-bold text-white/[0.02] pointer-events-none select-none leading-none truncate">
+                NOISE
+            </div>
+
+            <div class="px-4 md:px-16 mb-8 flex justify-between items-end relative z-10">
+                <h2 class="font-sans text-[10px] uppercase tracking-[0.3em] text-gray-500 flex items-center gap-2">
+                    <span class="w-2 h-2 bg-gray-800"></span>
+                    The Darkroom / Raw Files
+                </h2>
+                <span class="font-hand text-lg text-white rotate-[-5deg] opacity-70">Unfiltered chaos...</span>
+            </div>
+            
+            <div class="film-strip-wrapper">
+                <div class="film-strip px-4 md:px-16">
+                    <div class="negative-frame group hover-trigger">
+                        <img src="https://images.unsplash.com/photo-1552168324-d612d77725e3?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity grayscale">
+                    </div>
+                    <div class="negative-frame group hover-trigger">
+                        <img src="https://images.unsplash.com/photo-1542202229-7d93c33f5d39?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity grayscale">
+                    </div>
+                    <div class="negative-frame group hover-trigger">
+                        <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity grayscale">
+                    </div>
+                    <div class="negative-frame group hover-trigger">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity grayscale">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- JOURNAL -->
+        <section class="py-32 px-6 md:px-32 bg-bg relative">
+            <div class="max-w-2xl mx-auto text-center relative z-10">
+                <span class="font-mono text-[9px] text-blood uppercase tracking-widest mb-8 block">Final Thought</span>
+                
+                <div class="space-y-10">
+                    <p class="emotional-text text-2xl md:text-4xl text-white leading-tight relative">
+                        <span class="absolute -top-6 left-0 font-sans text-[9px] text-gray-700 tracking-widest uppercase opacity-50 hidden md:block">Quote from Diary, Page 1</span>
+                        "Fotím, abych nezapomněl, kdo jsem, když zrovna nejsem studentem. Škola mě učí techniku, ale <span class="text-blood font-serif italic">The Fame Monster</span> mě naučilo, že krása je v nedokonalosti."
+                    </p>
+                    
+                    <div class="flex justify-center">
+                        <p class="font-hand text-xl text-gray-500 rotate-2">
+                            - stpn, 4am
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="py-24 px-6 text-center border-t border-white/10 relative overflow-hidden">
+            <div class="absolute inset-0 bg-blood/5 pointer-events-none"></div>
+            
+            <h2 class="title-display text-[15vw] leading-none text-white mix-blend-overlay opacity-30 hover:opacity-100 transition-opacity duration-500 hover-trigger">
+                CONTACT
+            </h2>
+            
+            <div class="mt-12 flex flex-col md:flex-row justify-center items-center gap-8 font-sans text-[10px] uppercase tracking-widest text-gray-500">
+                <a href="mailto:L20230064@prumyslovkajihlava.cz" class="line-through-hover hover:text-white transition-colors hover-trigger">School Mail</a>
+            </div>
+
+            <p class="mt-20 font-mono text-[9px] text-blood opacity-60">
+                © 2025 STPN.JPG. Inspired by Lady Gaga. Driven by Anxiety.
+            </p>
+        </footer>
+
+    </main>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+
+    <script>
+        // --- SUBLIMINAL WORDS CONFIG ---
+        const tfmWords = [
+            "Fame.", "Monster.", "Fear.", "Love.", "Sex.", "Death.", "Obsession.", "Fetish.", 
+            "Fantasy.", "Vice.", "Celebrity.", "Illusion.", "Addiction.", "Desire.", 
+            "Corruption.", "Seduction.", "Vanity.", "Darkness.", "Glory.", "Excess.", 
+            "Power.", "Voyeurism.", "Decay.", "Pleasure.", "Chaos.", "Infatuation.", 
+            "Notoriety.", "Temptation.", "Identity.", "Taboo."
+        ];
+
+        // --- CURSOR LOGIC ---
+        const cursor = document.querySelector('.cursor-main');
+        const hoverTriggers = document.querySelectorAll('.hover-trigger, a');
+
+        if (window.matchMedia("(hover: hover)").matches) {
+            document.addEventListener('mousemove', (e) => {
+                gsap.to(cursor, { 
+                    x: e.clientX, 
+                    y: e.clientY, 
+                    duration: 0.1, 
+                    ease: "power2.out"
+                });
+            });
+
+            hoverTriggers.forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+            });
+        }
+
+        // --- SUBLIMINAL FLASH LOGIC ---
+        function startSubliminalFlash() {
+            const container = document.getElementById('subliminal-text');
+            if (!container) return;
+            
+            function flash() {
+                const interval = Math.random() * 2500 + 500;
+                
+                setTimeout(() => {
+                    const word = tfmWords[Math.floor(Math.random() * tfmWords.length)];
+                    container.innerText = word;
+                    container.classList.add('flash-visible');
+                    
+                    const visibleTime = 200 + Math.random() * 500;
+
+                    setTimeout(() => {
+                        container.classList.remove('flash-visible');
+                        flash();
+                    }, visibleTime); 
+                    
+                }, interval);
+            }
+            
+            flash();
+        }
+
+        // --- LENIS SCROLL ---
+        const lenis = new Lenis({
+            duration: 1.5,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smooth: true,
+        });
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // --- GSAP ANIMATIONS ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        window.addEventListener('load', () => {
+            startSubliminalFlash();
+
+            const tl = gsap.timeline();
+            
+            const words = document.querySelectorAll('.intro-word');
+            tl.to(words, { 
+                display: 'block', 
+                opacity: 1, 
+                duration: 0.2, 
+                stagger: { 
+                    each: 0.3, 
+                    onComplete: function() { this.targets()[0].style.display = 'none'; } 
+                } 
+            });
+
+            let countObj = { val: 0 };
+            tl.to(countObj, {
+                val: 100,
+                duration: 1.5,
+                ease: "power2.out",
+                onUpdate: () => {
+                    document.querySelector('.loader-percent').innerText = Math.floor(countObj.val);
+                    document.querySelector('.preloader-bar').style.width = countObj.val + "%";
+                }
+            }, "-=0.5");
+
+            tl.to('.preloader-text', { opacity: 1, duration: 1, ease: "power2.out" })
+              .to('.preloader-curtain', { 
+                  yPercent: -100, 
+                  duration: 1.2, 
+                  ease: "expo.inOut", 
+                  delay: 0.5 
+              })
+              .from('.hero-anim', {
+                  y: 100,
+                  opacity: 0,
+                  duration: 1.5,
+                  stagger: 0.1,
+                  ease: "power4.out"
+              }, "-=0.5");
+        });
+
+        gsap.to("#fear-scrolling-text", {
+            xPercent: -30,
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".fear-container",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1
+            }
+        });
+
+        const photos = document.querySelectorAll('.photo-frame img');
+        photos.forEach(img => {
+            gsap.to(img, {
+                scale: 1.15,
+                scrollTrigger: {
+                    trigger: img.parentElement,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+        });
+
+        gsap.to(".film-strip", {
+            x: -300, 
+            ease: "none",
+            scrollTrigger: {
+                trigger: ".film-strip-wrapper",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1
+            }
+        });
+
+    </script>
+</body>
+</html>
