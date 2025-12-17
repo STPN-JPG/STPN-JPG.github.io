@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#030303">
-    <title>STPN.JPG | COMING SOON</title>
+    <title>STPN.JPG | CHAOS THEORY</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,10 +12,9 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Bodoni (TFM), Inter (School), Cormorant (Emotion), Nothing You Could Do (Handwritten Notes) -->
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;0,900;1,400;1,900&family=Inter:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Nothing+You+Could+Do&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Caveat:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Lenis CSS (Smooth Scroll) -->
+    <!-- Lenis CSS -->
     <style>
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto; }
@@ -29,7 +28,7 @@
             theme: {
                 extend: {
                     colors: {
-                        bg: '#030303',
+                        bg: '#050505',
                         paper: '#e6e6e6',
                         blood: '#900000',
                         graytext: '#666666',
@@ -39,21 +38,28 @@
                         'sans': ['"Inter"', 'sans-serif'],
                         'serif': ['"Bodoni Moda"', 'serif'],
                         'poetry': ['"Cormorant Garamond"', 'serif'],
-                        'hand': ['"Nothing You Could Do"', 'cursive'],
-                        'mono': ['"Courier New"', 'Courier', 'monospace'],
+                        'hand': ['"Caveat"', 'cursive'],
+                        'mono': ['"Space Mono"', 'monospace'],
+                        'display': ['"Syne"', 'sans-serif'],
                     },
-                    cursor: {
-                        'none': 'none',
-                    },
+                    cursor: { 'none': 'none' },
+                    spacing: { 'screen-margin': '4vw' },
                     animation: {
-                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'glitch': 'glitch 1s linear infinite',
+                        'pulse-fast': 'pulse 0.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 20s linear infinite',
+                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+                        'float': 'float 6s ease-in-out infinite',
                     },
                     keyframes: {
-                        glitch: {
-                            '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
-                            '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
-                            '62%': { transform: 'translate(0,0) skew(5deg)' },
+                        shake: {
+                            '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+                            '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+                            '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+                            '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
                         }
                     }
                 }
@@ -62,296 +68,218 @@
     </script>
 
     <style>
-        /* --- BASE --- */
-        body {
-            background-color: #030303;
-            color: #e6e6e6;
-            overflow-x: hidden;
-            width: 100%;
-            height: 100vh;
-            cursor: auto;
-        }
-
-        /* --- ATMOSPHERE LAYERS --- */
-        .noise-overlay {
-            position: fixed; inset: 0; pointer-events: none; z-index: 40;
-            opacity: 0.08;
-            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
-            mix-blend-mode: overlay;
-        }
-
-        .scanlines {
-            position: fixed; inset: 0; pointer-events: none; z-index: 41;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.3));
-            background-size: 100% 4px;
-            opacity: 0.15;
-        }
-
-        .vignette {
-            position: fixed; inset: 0; pointer-events: none; z-index: 42;
-            background: radial-gradient(circle, transparent 60%, #030303 100%);
-        }
-
-        /* --- TYPOGRAPHY --- */
-        .title-display {
-            font-family: "Bodoni Moda", serif;
-            font-weight: 700;
-            text-transform: uppercase;
-            line-height: 0.9;
-            letter-spacing: -0.04em;
-            font-size: clamp(3rem, 13vw, 10rem);
-        }
-
-        .emotional-text {
-            font-family: "Cormorant Garamond", serif;
-            font-style: italic;
-            line-height: 1.4;
-        }
-
-        .handwritten {
-            font-family: "Nothing You Could Do", cursive;
-            transform: rotate(-2deg);
-        }
-
-        /* --- BRANDING STYLES --- */
-        .brand-logo {
-            font-family: "Bodoni Moda", serif;
-            font-weight: 900;
-            font-style: italic;
-            letter-spacing: -0.05em;
-            line-height: 0.8;
-        }
+        body { background-color: #050505; color: #F2F2F2; overflow-x: hidden; width: 100%; cursor: auto; -webkit-font-smoothing: antialiased; }
         
-        .brand-ext {
-            font-family: "Inter", sans-serif;
-            font-weight: 600;
-            letter-spacing: 0.05em;
+        /* FX Layers */
+        .noise-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: 0.08; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E"); mix-blend-mode: overlay; }
+        .scanlines { position: fixed; inset: 0; pointer-events: none; z-index: 41; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.3)); background-size: 100% 4px; opacity: 0.15; }
+        
+        /* Typography */
+        .title-display { 
+            font-family: "Syne", sans-serif; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            line-height: 0.9; 
+            letter-spacing: -0.04em; 
+            font-size: clamp(2.5rem, 11vw, 10rem); 
+            white-space: nowrap;
         }
+        .emotional-text { font-family: "Cormorant Garamond", serif; font-style: italic; line-height: 1.3; }
+        .handwritten { font-family: "Caveat", cursive; transform: rotate(-2deg); }
+        
+        /* UI Elements */
+        .monolith-input {
+            background: transparent; border: 2px solid #333;
+            color: white; font-family: "Space Mono", monospace; font-weight: 600; letter-spacing: 0.1em;
+            text-align: center; font-size: 1.2rem; width: 100%; max-width: 300px;
+            padding: 15px 0; outline: none; transition: all 0.3s;
+            clip-path: polygon(0 0, 100% 0, 100% 80%, 95% 100%, 0 100%);
+        }
+        .monolith-input:focus { border-color: #900000; background: rgba(144, 0, 0, 0.1); }
+        .monolith-input::placeholder { color: #444; font-size: 0.9rem; }
 
-        /* Hover effect for branding */
-        .branding-container:hover .brand-logo {
-            color: #900000;
-            text-shadow: 2px 2px 0px #fff;
-        }
-        .branding-container:hover .brand-ext {
-            background: #900000;
-            color: white;
-        }
-
-        /* --- CUSTOM CURSOR (DESKTOP ONLY) --- */
+        /* Cursor */
         @media (hover: hover) and (pointer: fine) {
             body { cursor: none; }
-            .cursor-main {
-                width: 10px; height: 10px; background: #e6e6e6; border-radius: 50%;
-                position: fixed; top: 0; left: 0; pointer-events: none; z-index: 100;
-                mix-blend-mode: difference;
-                transition: width 0.3s, height 0.3s; transform: translate(-50%, -50%);
-            }
-            body.hovering .cursor-main {
-                width: 60px; height: 60px; background: transparent; border: 1px solid #7a0000;
-                mix-blend-mode: normal;
-            }
+            .custom-cursor { width: 12px; height: 12px; background: #900000; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1000; mix-blend-mode: exclusion; transition: transform 0.1s; transform: translate(-50%, -50%); border-radius: 50%; }
+            body.hovering .custom-cursor { transform: translate(-50%, -50%) scale(5); background: white; mix-blend-mode: difference; }
         }
-        @media (hover: none) {
-            .cursor-main { display: none !important; }
+        @media (hover: none) { .custom-cursor { display: none !important; } }
+
+        /* Preloader */
+        .preloader-curtain { position: fixed; inset: 0; background: #000; z-index: 999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        .intro-word { display: none; font-family: "Syne", sans-serif; font-weight: 700; font-size: 10vw; color: #fff; text-transform: uppercase; mix-blend-mode: difference; }
+
+        /* Chaos Elements */
+        .tape {
+            position: absolute; height: 30px; width: 120px; background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(2px); border-left: 2px solid rgba(255,255,255,0.2); border-right: 2px solid rgba(255,255,255,0.2);
+            transform: rotate(-35deg); z-index: 10;
+        }
+        .torn-paper {
+            mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 L200,0 L200,20 L190,15 L180,20 L170,10 L160,20 L150,15 L140,20 L130,5 L120,20 L110,15 L100,20 L90,10 L80,20 L70,15 L60,20 L50,5 L40,20 L30,15 L20,20 L10,10 L0,20 Z' fill='black'/%3E%3C/svg%3E");
+            mask-size: 100% 20px; mask-repeat: repeat-x; mask-position: bottom;
         }
 
-        /* --- PRELOADER --- */
-        .preloader-curtain {
-            position: fixed; inset: 0; background: #030303; z-index: 999;
-            display: flex; align-items: center; justify-content: center; flex-direction: column;
-        }
-        
-        .intro-word {
-            display: none;
-            font-family: "Inter", sans-serif;
-            font-weight: 700;
-            letter-spacing: 0.2em;
-            color: #7a0000;
-        }
+        /* Portfolio */
+        .reveal-img-container { position: relative; overflow: hidden; width: 100%; background-color: #1a1a1a; transition: transform 0.5s; }
+        .reveal-img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); filter: grayscale(100%) contrast(1.2); transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1), filter 0.5s ease; }
+        .group:hover .reveal-img { transform: scale(1); filter: grayscale(0%); }
+        .group:hover .reveal-img-container { transform: scale(0.98); }
 
-        /* --- ALIVE ELEMENTS --- */
-        .blinking-light {
-            width: 4px; height: 4px; background: #7a0000; border-radius: 50%;
-            animation: pulse-fast 2s infinite; display: inline-block;
-        }
+        .marquee-container { width: 100vw; overflow: hidden; white-space: nowrap; background: #900000; color: #000; padding: 10px 0; transform: rotate(2deg) scale(1.05); mix-blend-mode: normal; border: 2px solid white; margin-left: -2.5%; width: 105%; display: flex; }
+        .marquee-content { flex-shrink: 0; animation: marquee 20s linear infinite; font-family: "Syne", sans-serif; font-weight: 800; text-transform: uppercase; font-size: 1.5rem; padding-right: 2rem; }
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-100%); } }
 
-        /* --- SUBLIMINAL MONITOR (Vertical Right Side) --- */
-        #monitor-panel {
-            position: fixed;
-            top: 50%;
-            right: 2rem;
-            transform: translateY(-50%);
-            z-index: 35;
-            display: none;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 1rem;
-            pointer-events: none;
-        }
-        @media (min-width: 768px) {
-            #monitor-panel { display: flex; }
-        }
-
-        .monitor-block {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            font-family: "Courier New", monospace;
-            font-size: 10px;
-            color: #444;
-            letter-spacing: 0.1em;
-            border-left: 1px solid #222;
-            padding-left: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .flash-word-container {
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            transform: rotate(180deg); 
-            text-align: left;
-            min-height: 150px;
-        }
-
-        .flash-word {
-            font-family: "Bodoni Moda", serif;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #900000;
-            font-size: 1.2rem;
-            opacity: 0.5;
-            text-shadow: 0 0 8px rgba(144, 0, 0, 0.4);
-            transition: opacity 0.1s;
-        }
-        .flash-visible {
-            opacity: 1;
-            text-shadow: 0 0 15px rgba(144, 0, 0, 0.9);
-        }
+        /* SVG Cross Styling */
+        .icon-cross { width: 2rem; height: 2rem; fill: currentColor; }
     </style>
 </head>
-<body class="selection:bg-blood selection:text-white overflow-hidden">
+<body class="selection:bg-blood selection:text-white">
 
-    <!-- ATMOSPHERE -->
     <div class="noise-overlay"></div>
     <div class="scanlines"></div>
-    <div class="vignette"></div>
-    <div class="cursor-main"></div>
+    <div class="custom-cursor"></div>
 
-    <!-- SIDE MONITOR (RIGHT SIDE) -->
-    <div id="monitor-panel">
-        <div class="monitor-block">
-            <span>SYS_DIAGNOSTICS</span>
-            <span class="w-1 h-8 bg-gray-800 relative overflow-hidden">
-                <span class="absolute top-0 left-0 w-full h-full bg-blood animate-pulse opacity-50"></span>
-            </span>
-        </div>
-        <div class="monitor-block" style="border-left-color: #7a0000;">
-            <span>MENTAL_STATE</span>
-            <div class="flash-word-container">
-                <span id="subliminal-text" class="flash-word">WAITING</span>
-            </div>
-        </div>
+    <!-- HUD (Persistent) -->
+    <div class="fixed left-4 bottom-4 font-mono text-[9px] md:text-[10px] text-gray-500 z-50 pointer-events-none mix-blend-difference hidden md:block">
+        REC: ● [00:00:00]<br>
+        ISO: 3200<br>
+        RAW_MODE: ON
     </div>
-
-    <!-- HUD / LIVE ELEMENTS -->
-    <div class="fixed left-6 top-1/2 -translate-y-1/2 w-[1px] h-32 bg-white/10 hidden md:block z-30">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-white/30"></div>
-        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-white/30"></div>
-    </div>
-    <div class="fixed right-6 bottom-8 font-mono text-[9px] text-gray-600 z-30 hidden md:flex flex-col items-end gap-1">
-        <span>SYS: DEVELOPING</span>
-        <span><span class="blinking-light mr-1"></span>REC</span>
+    
+    <div class="fixed bottom-4 right-4 font-mono text-[9px] md:text-[10px] text-blood z-50 pointer-events-none animate-pulse hidden md:block">
+        /// SYSTEM_UNSTABLE
     </div>
 
     <!-- PRELOADER -->
     <div class="preloader-curtain">
-        <div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-            <span class="text-[30vw] font-bold text-[#080808] leading-none select-none">WAITING</span>
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <span class="intro-word">CHAOS</span>
+            <span class="intro-word">CONTROL</span>
+            <span class="intro-word">ART</span>
+            <span class="intro-word text-blood">STPN</span>
         </div>
-
-        <div class="text-center space-y-8 px-6 relative z-10 w-full max-w-lg">
-            <div class="h-6 overflow-hidden relative">
-                <div class="intro-word-container flex justify-center items-center h-full text-xs font-mono uppercase tracking-[0.5em] text-blood">
-                    <span class="intro-word">EMPTY</span>
-                    <span class="intro-word">SILENCE</span>
-                    <span class="intro-word">WAITING</span>
-                    <span class="intro-word">DEVELOPING...</span>
-                </div>
-            </div>
-
-            <h1 class="font-serif italic text-3xl md:text-5xl text-white preloader-text opacity-0 leading-tight">
-                "The darkroom is closed.<br>For now."
-            </h1>
-
-            <div class="w-full relative">
-                <div class="h-[1px] w-full bg-gray-800">
-                    <div class="h-full bg-blood preloader-bar w-0"></div>
-                </div>
-                <div class="flex justify-between mt-2 font-mono text-[9px] text-gray-500">
-                    <span>SYSTEM_BOOT</span>
-                    <span><span class="loader-percent">0</span>%</span>
-                </div>
+        <div class="absolute bottom-10 w-full text-center">
+            <div class="w-48 md:w-64 h-[2px] bg-gray-900 mx-auto overflow-hidden">
+                <div class="h-full bg-blood preloader-bar w-0"></div>
             </div>
         </div>
     </div>
 
-    <!-- NAV -->
-    <nav class="fixed top-0 w-full p-6 md:p-10 flex justify-between items-start z-40 mix-blend-difference text-white">
-        <!-- BRANDING -->
-        <a href="#" class="branding-container block hover-trigger group relative cursor-default">
-            <div class="flex items-baseline">
-                <span class="brand-logo text-3xl md:text-4xl text-white transition-all duration-300">STPN</span>
-                <span class="brand-ext text-[10px] md:text-xs bg-white text-black px-1 py-0.5 ml-1 transition-all duration-300 transform -translate-y-1 rotate-[-5deg] inline-block">.JPG</span>
-            </div>
-            <div class="h-[1px] w-0 bg-blood group-hover:w-full transition-all duration-500 ease-out mt-1"></div>
-            <span class="block text-[7px] font-sans tracking-[0.2em] text-gray-400 mt-1 uppercase group-hover:text-white transition-colors">
-                Raw Data
-            </span>
-        </a>
-
-        <div class="flex flex-col items-end text-[9px] font-mono uppercase tracking-widest gap-1 text-gray-400">
-            <span class="text-white">The Fame Monster Era</span>
-            <span>Semester 01 // Semester 02 Pending</span>
+    <!-- === VIEW 1: LOCK SCREEN === -->
+    <main id="lock-screen" class="min-h-screen w-full flex flex-col items-center justify-center relative overflow-hidden bg-bg z-40 hidden opacity-0 p-4">
+        
+        <!-- Chaotic Background Type -->
+        <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20 select-none overflow-hidden">
+            <span class="absolute -top-10 -left-10 text-[20vw] font-display font-bold text-gray-800 rotate-12 whitespace-nowrap">LOCKED</span>
+            <span class="absolute bottom-20 -right-20 text-[15vw] font-serif italic text-gray-800 -rotate-6 whitespace-nowrap">Access</span>
         </div>
-    </nav>
 
-    <main class="h-screen w-full flex flex-col items-center justify-center relative overflow-hidden">
-
-        <!-- BACKGROUND ELEMENTS -->
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] border border-white/5 rounded-full pointer-events-none"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] border border-white/5 rounded-full pointer-events-none"></div>
-
-        <div class="relative z-10 text-center px-4">
+        <div class="relative z-10 w-full max-w-lg flex flex-col items-center">
             
-            <div class="mb-8 opacity-0 hero-anim">
-                <span class="font-mono text-[10px] text-blood uppercase tracking-[0.5em] block mb-2">Status: Empty</span>
-                <div class="h-[1px] w-12 bg-blood mx-auto"></div>
+            <!-- Sticker -->
+            <div class="bg-white text-black font-mono text-[10px] md:text-xs font-bold px-4 py-2 rotate-[-4deg] mb-8 md:mb-12 shadow-[4px_4px_0px_#900000]">
+                RESTRICTED AREA
             </div>
 
-            <h1 class="title-display text-white opacity-0 hero-anim relative">
-                COMING<br>
-                <span class="text-transparent" style="-webkit-text-stroke: 1px #e6e6e6;">SOON</span>
-                <!-- Handwritten Note -->
-                <div class="absolute -top-6 -right-4 font-hand text-blood text-xl md:text-2xl rotate-[10deg] opacity-80 z-20">
-                    Be patient.
+            <div class="text-center mb-12 md:mb-16 relative">
+                <!-- SVG CROSS -->
+                <div class="flex justify-center mb-4 text-blood">
+                    <svg class="icon-cross w-12 h-12" viewBox="0 0 24 24"><path d="M11 2h2v8h8v2h-8v8h-2v-8H3v-2h8z"/></svg>
                 </div>
-            </h1>
 
-            <p class="emotional-text text-xl md:text-3xl text-gray-300 mt-12 max-w-xl mx-auto opacity-0 hero-anim leading-relaxed">
-                "Archivy jsou prázdné. Monstrum se stále vyvíjí. Zatím nemám žádné fotky k ukázání."
-            </p>
-
-            <div class="mt-16 opacity-0 hero-anim">
-                <a href="mailto:L20230064@prumyslovkajihlava.cz" class="font-sans text-[10px] uppercase tracking-[0.2em] text-white border border-white/20 px-6 py-3 hover:bg-white hover:text-black transition-colors hover-trigger">
-                    Contact Me
-                </a>
+                <h1 class="title-display text-white leading-none relative inline-block">
+                    ACCESS<br><span class="text-blood" style="-webkit-text-stroke: 1px #900000; color: transparent;">DENIED</span>
+                    <!-- 403 Badge - Fixed Spacing -->
+                    <span class="absolute -right-8 -top-4 text-[10px] md:text-sm font-mono text-white bg-black px-3 py-1 rotate-12 border border-white whitespace-nowrap shadow-lg tracking-widest">ERR 403</span>
+                </h1>
             </div>
 
-        </div>
+            <!-- Brutalist Input -->
+            <div class="w-full flex flex-col items-center gap-6 relative">
+                <div class="relative w-full flex justify-center group">
+                    <span class="absolute left-0 md:left-4 top-1/2 -translate-y-1/2 font-mono text-[10px] md:text-xs text-gray-500 opacity-50 group-hover:opacity-100 transition-opacity hidden md:block">PWD:</span>
+                    <input type="password" id="pass-input" placeholder="ENTER_CODE" class="monolith-input" autocomplete="off">
+                </div>
+                
+                <button id="unlock-btn" class="font-display font-bold text-lg md:text-xl text-white hover:text-blood transition-colors hover-trigger flex items-center gap-2 py-4">
+                    [ UNLOCK ] <span class="text-sm font-mono">→</span>
+                </button>
 
+                <p id="error-msg" class="font-mono text-[10px] md:text-xs text-blood bg-blood/10 px-4 py-1 opacity-0 transition-opacity border border-blood/20">
+                    INCORRECT PASSWORD
+                </p>
+            </div>
+        </div>
     </main>
+
+    <!-- === VIEW 2: INTERNAL CONTENT (COMING SOON) === -->
+    <div id="app-content" class="hidden relative z-10">
+        
+        <!-- NAV -->
+        <nav class="fixed top-0 w-full px-6 py-6 flex justify-between items-center z-[100] mix-blend-difference text-white pointer-events-none">
+            <a href="#" class="pointer-events-auto block hover-trigger group">
+                <div class="bg-white text-black font-display font-bold text-xl md:text-2xl px-2 py-1 rotate-2 group-hover:rotate-0 transition-transform">
+                    STPN.JPG
+                </div>
+            </a>
+            <div class="hidden md:block font-mono text-[10px] uppercase tracking-widest text-right">
+                <span class="block bg-blood text-white px-2 mb-1">Visual Diary</span>
+                <span class="block text-gray-400">Semestr 01</span>
+            </div>
+        </nav>
+
+        <!-- EMPTY STATE HERO -->
+        <section class="min-h-screen relative flex flex-col justify-center items-center overflow-hidden p-6">
+            <!-- Background Static -->
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#000_80%)] pointer-events-none z-10"></div>
+            
+            <div class="relative z-20 text-center max-w-4xl mx-auto">
+                <span class="font-mono text-[10px] md:text-xs text-gray-500 uppercase tracking-[0.5em] block mb-6 animate-pulse">
+                    Database Connection Established
+                </span>
+                
+                <h1 class="title-display text-white leading-[0.85] mb-8">
+                    NO<br><span class="text-transparent" style="-webkit-text-stroke: 1px #900000;">DATA</span>
+                </h1>
+
+                <div class="flex justify-center mb-12">
+                    <div class="tape rotate-[-2deg]"></div>
+                </div>
+
+                <p class="emotional-text text-xl md:text-3xl text-gray-400 max-w-xl mx-auto leading-relaxed">
+                    "Archivy jsou prázdné. Filmy se stále vyvolávají. Monstrum spí."
+                </p>
+
+                <div class="mt-16 font-mono text-[10px] md:text-xs text-gray-600 border border-gray-800 p-4 inline-block">
+                    <p>STATUS: PENDING</p>
+                    <p>EST. UPDATE: SOON</p>
+                </div>
+            </div>
+
+            <!-- Marquee Footer -->
+            <div class="absolute bottom-0 left-0 w-full py-4 border-t border-white/10 overflow-hidden">
+                 <div class="marquee-content text-gray-600 text-xs font-mono uppercase tracking-widest">
+                    Coming Soon — Coming Soon — Coming Soon — Coming Soon — Coming Soon — Coming Soon —
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER (Simplified) -->
+        <footer class="py-12 bg-bg text-center relative border-t border-white/20">
+            <div class="max-w-4xl mx-auto px-4">
+                <a href="mailto:L20230064@prumyslovkajihlava.cz" class="title-display text-[8vw] text-white hover:text-blood transition-colors duration-300 block hover-trigger leading-none mix-blend-difference cursor-none break-all">
+                    CONTACT
+                </a>
+                <div class="mt-12 flex flex-col md:flex-row justify-center gap-12 font-mono text-[10px] md:text-xs uppercase tracking-widest text-gray-500 border-t border-white/10 pt-8">
+                    <a href="mailto:L20230064@prumyslovkajihlava.cz" class="hover:text-white transition-colors border-b border-transparent hover:border-white">School Mail</a>
+                    <span>© 2025 STPN.JPG</span>
+                </div>
+            </div>
+        </footer>
+
+    </div>
 
     <!-- SCRIPTS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -359,104 +287,107 @@
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
 
     <script>
-        // --- SUBLIMINAL WORDS CONFIG ---
-        const tfmWords = [
-            "Empty.", "Silence.", "Waiting.", "Soon.", "Void.", "Nothing.", "Null.", "Blank.", 
-            "Zero.", "Future.", "Loading.", "Developing.", "Pending.", "Hiding.", "Darkness."
-        ];
+        // --- AUDIO ENGINE ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+            
+            osc.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
 
-        // --- CURSOR LOGIC ---
-        const cursor = document.querySelector('.cursor-main');
-        const hoverTriggers = document.querySelectorAll('.hover-trigger, a');
+            if (type === 'type') {
+                osc.type = 'square'; osc.frequency.setValueAtTime(800 + Math.random() * 200, now);
+                gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                osc.start(now); osc.stop(now + 0.05);
+            } else if (type === 'error') {
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now); osc.frequency.linearRampToValueAtTime(50, now + 0.4);
+                gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                osc.start(now); osc.stop(now + 0.4);
+            } else if (type === 'unlock') {
+                const notes = [261.63, 329.63, 392.00, 523.25];
+                notes.forEach((freq, i) => {
+                    const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+                    o.type = 'triangle'; o.frequency.value = freq; o.connect(g); g.connect(audioCtx.destination);
+                    g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(0.05, now + 0.1 + (i*0.05)); g.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+                    o.start(now); o.stop(now + 1.5);
+                });
+            }
+        }
 
+        // --- LOGIC ---
+        const PASSWORD = "littlemonsters";
+        const passInput = document.getElementById('pass-input');
+        const unlockBtn = document.getElementById('unlock-btn');
+        const errorMsg = document.getElementById('error-msg');
+        const lockScreen = document.getElementById('lock-screen');
+        const appContent = document.getElementById('app-content');
+        const cursor = document.querySelector('.custom-cursor');
+        const preloader = document.querySelector('.preloader-curtain');
+
+        // Cursor
         if (window.matchMedia("(hover: hover)").matches) {
             document.addEventListener('mousemove', (e) => {
-                gsap.to(cursor, { 
-                    x: e.clientX, 
-                    y: e.clientY, 
-                    duration: 0.1, 
-                    ease: "power2.out"
-                });
+                gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, ease: "power2.out" });
             });
-
-            hoverTriggers.forEach(el => {
-                el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-                el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-            });
-        }
-
-        // --- SUBLIMINAL FLASH LOGIC ---
-        function startSubliminalFlash() {
-            const container = document.getElementById('subliminal-text');
-            if (!container) return;
-            
-            function flash() {
-                const interval = Math.random() * 2500 + 500;
-                
-                setTimeout(() => {
-                    const word = tfmWords[Math.floor(Math.random() * tfmWords.length)];
-                    container.innerText = word;
-                    container.classList.add('flash-visible');
-                    
-                    const visibleTime = 200 + Math.random() * 500;
-
-                    setTimeout(() => {
-                        container.classList.remove('flash-visible');
-                        flash();
-                    }, visibleTime); 
-                    
-                }, interval);
-            }
-            
-            flash();
-        }
-
-        // --- GSAP ANIMATIONS ---
-        window.addEventListener('load', () => {
-            startSubliminalFlash();
-
-            const tl = gsap.timeline();
-            
-            // 1. Flash Words Effect
-            const words = document.querySelectorAll('.intro-word');
-            tl.to(words, { 
-                display: 'block', 
-                opacity: 1, 
-                duration: 0.2, 
-                stagger: { 
-                    each: 0.3, 
-                    onComplete: function() { this.targets()[0].style.display = 'none'; } 
-                } 
-            });
-
-            // 2. Load Counter
-            let countObj = { val: 0 };
-            tl.to(countObj, {
-                val: 100,
-                duration: 1.5,
-                ease: "power2.out",
-                onUpdate: () => {
-                    document.querySelector('.loader-percent').innerText = Math.floor(countObj.val);
-                    document.querySelector('.preloader-bar').style.width = countObj.val + "%";
+            document.addEventListener('mouseover', (e) => {
+                if(e.target.classList.contains('hover-trigger') || e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+                    document.body.classList.add('hovering');
                 }
-            }, "-=0.5");
+            });
+            document.addEventListener('mouseout', () => { document.body.classList.remove('hovering'); });
+        }
 
-            // 3. Reveal Content
-            tl.to('.preloader-text', { opacity: 1, duration: 1, ease: "power2.out" })
-              .to('.preloader-curtain', { 
+        // Auth
+        passInput.addEventListener('input', () => playSound('type'));
+        
+        function unlock() {
+            if (passInput.value.toLowerCase() === PASSWORD) {
+                playSound('unlock');
+                gsap.to(lockScreen, { opacity: 0, duration: 1, onComplete: () => {
+                    lockScreen.style.display = 'none';
+                    appContent.classList.remove('hidden');
+                    gsap.fromTo(appContent, { opacity: 0 }, { opacity: 1, duration: 1 });
+                    ScrollTrigger.refresh();
+                }});
+            } else {
+                playSound('error');
+                errorMsg.style.opacity = 1;
+                gsap.fromTo(passInput, { x: -10 }, { x: 10, duration: 0.05, repeat: 5, yoyo: true, onComplete: () => gsap.to(passInput, { x: 0 }) });
+                setTimeout(() => errorMsg.style.opacity = 0, 2000);
+            }
+        }
+        unlockBtn.addEventListener('click', unlock);
+        passInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') unlock(); });
+
+        // Intro
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            const words = document.querySelectorAll('.intro-word');
+            
+            tl.to(words, { display: 'block', opacity: 1, duration: 0.1, stagger: { each: 0.2, onComplete: function() { this.targets()[0].style.display = 'none'; } } })
+              .to('.preloader-bar', { width: '100%', duration: 1, ease: "expo.out" })
+              .to(preloader, { 
                   yPercent: -100, 
                   duration: 1.2, 
                   ease: "expo.inOut", 
-                  delay: 0.5 
-              })
-              .to('.hero-anim', {
-                  y: 0,
-                  opacity: 1,
-                  duration: 1.5,
-                  stagger: 0.2,
-                  ease: "power4.out"
-              }, "-=0.5");
+                  onComplete: () => {
+                      lockScreen.classList.remove('hidden');
+                      lockScreen.style.display = 'flex'; 
+                      gsap.to(lockScreen, { opacity: 1, duration: 0.5 });
+                  }
+              });
         });
+
+        // Lenis
+        const lenis = new Lenis({ duration: 1.2, smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+        gsap.registerPlugin(ScrollTrigger);
+
     </script>
 </body>
 </html>
